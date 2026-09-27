@@ -40,9 +40,21 @@ class Airtouch2PlusClimateEntity(ClimateEntity):
     _attr_target_temperature_step: float = 1.0
     _attr_temperature_unit: str = UnitOfTemperature.CELSIUS
 
-    def __init__(self, at2plus_aircon: At2PlusAircon) -> None:
+    def __init__(self, at2plus_aircon: At2PlusAircon, refresh) -> None:
         """Initialize the climate device."""
         self._ac = at2plus_aircon
+        self._refresh = refresh
+
+    @property
+    def available(self):
+        return self._refresh.available
+
+    @property
+    def extra_state_attributes(self):
+        return {"last_successful_refresh": self._refresh.last_refresh}
+
+    async def async_update(self):
+        await self._refresh.refresh()
 
     #
     # Entity overrides:
@@ -76,6 +88,7 @@ class Airtouch2PlusClimateEntity(ClimateEntity):
         # Add callback for when aircon receives new data
         # Removes callback on remove
         self.async_on_remove(self._ac.add_callback(self.async_write_ha_state))
+        self.async_on_remove(self._refresh.add_listener(self.async_write_ha_state))
 
     #
     # ClimateEntity overrides:
@@ -130,28 +143,31 @@ class Airtouch2PlusClimateEntity(ClimateEntity):
         """Set new target temperature."""
         temp = float(kwargs.get(ATTR_TEMPERATURE, 0))
         await self._ac.set_setpoint(temp)
+        await self._refresh.refresh()
 
     async def async_set_fan_mode(self, fan_mode: str) -> None:
         """Set new target fan mode."""
         await self._ac.set_fan_speed(HA_FAN_SPEED_TO_AT2PLUS[fan_mode])
+        await self._refresh.refresh()
 
     async def async_set_hvac_mode(self, hvac_mode: HVACMode) -> None:
         """Set new target hvac mode."""
         if hvac_mode == HVACMode.OFF:
-            if self._ac.is_on():
-                await self.async_turn_off()
+            await self._ac.turn_off()
         else:
-            if not self._ac.is_on():
-                await self.async_turn_on()
+            await self._ac.turn_on()
             await self._ac.set_mode(HA_MODE_TO_AT2PLUS_SETMODE[hvac_mode])
+        await self._refresh.refresh()
 
     async def async_turn_on(self):
         """Turn on."""
         await self._ac.turn_on()
+        await self._refresh.refresh()
 
     async def async_turn_off(self):
         """Turn off."""
         await self._ac.turn_off()
+        await self._refresh.refresh()
 
     @property
     def supported_features(self) -> ClimateEntityFeature:

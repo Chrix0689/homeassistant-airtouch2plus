@@ -4,12 +4,12 @@
   "codeowners": ["@nathanvdh"],
   "config_flow": true,
   "dependencies": [],
-  "documentation": "https://www.home-assistant.io/integrations/airtouch2",
+  "documentation": "https://github.com/Chrix0689/homeassistant-airtouch2plus",
   "homekit": {},
   "iot_class": "local_push",
-  "issue_tracker": "https://github.com/nathanvdh/homeassistant-airtouch2plus/issues",
-  "requirements": ["airtouch2==0.8.7"],
+  "issue_tracker": "https://github.com/Chrix0689/homeassistant-airtouch2plus/issues",
+  "requirements": ["airtouch2 @ https://raw.githubusercontent.com/Chrix0689/airtouch2-python/ce116f25a2eea9c1ccbb2bc5455cb91ecb9149e4/airtouch2-0.8.7.post1-py3-none-any.whl#sha256=764d6da299b3ebc4924c08ca35fda2150746588f6bea557acb13efd65e312980"],
   "ssdp": [],
-  "version": "0.2.12",
+  "version": "0.2.13rc1",
   "zeroconf": []
 }

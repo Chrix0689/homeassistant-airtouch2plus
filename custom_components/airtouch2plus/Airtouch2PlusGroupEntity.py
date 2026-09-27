@@ -17,9 +17,21 @@ _LOGGER = logging.getLogger(__name__)
 class AirTouch2PlusGroupEntity(FanEntity):
     """Representation of an AirTouch 2+ zone."""
 
-    def __init__(self, group: At2PlusGroup) -> None:
+    def __init__(self, group: At2PlusGroup, refresh) -> None:
         """Initialize the fan entity."""
         self._group = group
+        self._refresh = refresh
+
+    @property
+    def available(self):
+        return self._refresh.available
+
+    @property
+    def extra_state_attributes(self):
+        return {"last_successful_refresh": self._refresh.last_refresh}
+
+    async def async_update(self):
+        await self._refresh.refresh()
 
     #
     # Entity attributes:
@@ -59,6 +71,7 @@ class AirTouch2PlusGroupEntity(FanEntity):
         # Add callback for when group receives new data.
         # Removes callback on remove.
         self.async_on_remove(self._group.add_callback(self.async_write_ha_state))
+        self.async_on_remove(self._refresh.add_listener(self.async_write_ha_state))
 
     #
     # FanEntity overrides
@@ -91,11 +104,14 @@ class AirTouch2PlusGroupEntity(FanEntity):
     ) -> None:
         """Turn on the group."""
         await self._group.turn_on(percentage)
+        await self._refresh.refresh()
 
     async def async_turn_off(self, **kwargs: Any) -> None:
         """Turn off the group."""
         await self._group.turn_off()
+        await self._refresh.refresh()
 
     async def async_set_percentage(self, percentage: int) -> None:
         """Set the speed percentage of the group damper."""
         await self._group.set_damp(percentage)
+        await self._refresh.refresh()
