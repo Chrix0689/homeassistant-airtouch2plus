@@ -1,5 +1,16 @@
 # Airtouch 2+ integration
 
+> **Latest fork candidate: 0.2.13rc2 (7 November 2026), for Home Assistant 2026.11.0.**
+> The code on `master` is the legacy integration and does not include the fork's
+> refresh/reconnect changes or startup fix. Before downloading, read
+> **[what this fork changes and its test scope](https://github.com/Chrix0689/homeassistant-airtouch2plus/tree/fix/ha-startup-compatibility#what-this-fork-changes-from-the-original-integration)**.
+> The candidate adds recurring status requests, stale-state availability,
+> explicit power commands, a pinned patched controller library and current
+> Home Assistant imports/temperature properties. It remains a release candidate.
+> **[Download the fixed candidate ZIP](https://github.com/Chrix0689/homeassistant-airtouch2plus/archive/refs/heads/fix/ha-startup-compatibility.zip)**
+> Both `fix/ha-startup-compatibility` and `fix/regular-state-refresh` include rc2.
+> [Installation and rollback](https://github.com/Chrix0689/homeassistant-airtouch2plus/blob/fix/ha-startup-compatibility/INSTALL.md)
+
 _Component to integrate with Polyaire Airtouch 2+._
 
 Utilizes [airtouch2-python](https://github.com/nathanvdh/airtouch2-python)
