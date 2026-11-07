@@ -6,8 +6,11 @@ the last successful refresh. Explicit HVAC mode commands no longer depend on
 the local cache being correct. Responses after commands are requested through
 the same refresh lock, and the periodic task is cancelled on integration unload.
 
-This is a development candidate (0.2.13rc2). It has not
-been run in a complete Home Assistant runtime or against physical hardware.
+This is a development candidate (0.2.13rc2). The corrected climate file was
+applied over rc1 on one live Home Assistant 2026.11.0 installation on 7 November
+2026; startup, three existing entities and controller readings were checked.
+The complete rc2 folder was not installed in that live check. Physical command
+and failure/recovery behaviour still require attended hardware validation.
 The separate `airtouch2-python` branch fixes command loss after reconnection.
 The manifest pins a wheel built from the patched library, using an immutable
 GitHub commit URL and a SHA-256 checksum. Its version is `0.8.7.post1`.

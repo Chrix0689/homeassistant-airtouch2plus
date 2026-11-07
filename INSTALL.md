@@ -12,8 +12,13 @@ It is a receipt timestamp, not proof that every display has the same snapshot.
 
 The Python dependency is pinned to a published 0.8.7.post1 wheel by immutable
 commit and SHA-256. No manual edits to installed Python packages are needed.
-Offline regression and protocol tests pass; full HA and hardware validation
-remain required. Treat this as a release candidate.
+Automated regression, protocol and complete module-import checks pass against
+Home Assistant 2026.11.0 on Python 3.14. A live climate-file upgrade over rc1
+was checked on 7 November 2026: startup succeeded, the existing AC and two zone
+entities were available, readings displayed and the filtered AirTouch logs
+showed no issues. The complete rc2 folder was not installed in that live check.
+Physical command and failure/recovery testing remain required.
+Treat this as a release candidate.
 
 ## Install during an attended maintenance window
 
@@ -31,8 +36,10 @@ remain required. Treat this as a release candidate.
    verify HA becomes unavailable and automatically recovers once connectivity
    returns. Compare the last-successful-refresh timestamp.
 
-Do not install the fork's unchanged master branch. Use the published candidate
-archive or `fix/ha-startup-compatibility`. HACS management of a fork with the same
+Do not install the fork's legacy master code. Use the
+[fixed branch ZIP](https://github.com/Chrix0689/homeassistant-airtouch2plus/archive/refs/heads/fix/ha-startup-compatibility.zip)
+or `fix/ha-startup-compatibility`. The `fix/regular-state-refresh` branch also
+includes rc2. HACS management of a fork with the same
 domain needs care: an upstream HACS update can overwrite a manual installation.
 Do not enable automatic updates for this custom component during validation.
 
