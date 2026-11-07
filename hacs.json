@@ -1,4 +1,6 @@
 
 {
-    "name": "Airtouch2Plus"
+    "name": "Airtouch2Plus",
+    "homeassistant": "2026.11.0",
+    "render_readme": true
 }

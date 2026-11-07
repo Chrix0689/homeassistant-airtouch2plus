@@ -1,0 +1,29 @@
+name: Home Assistant compatibility
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.14'
+      - name: Install the verified Home Assistant version and pinned AirTouch library
+        run: |
+          python -m pip install homeassistant==2026.11.0 voluptuous
+          python - <<'PY'
+          import json, subprocess, sys
+          from pathlib import Path
+          manifest = json.loads(Path('custom_components/airtouch2plus/manifest.json').read_text())
+          subprocess.check_call([sys.executable, '-m', 'pip', 'install', *manifest['requirements']])
+          PY
+      - name: Compile and test complete integration imports and protocol behaviour
+        env:
+          REQUIRE_HOMEASSISTANT: '1'
+        run: |
+          python -m compileall -q custom_components
+          python -m unittest discover -s tests -v
