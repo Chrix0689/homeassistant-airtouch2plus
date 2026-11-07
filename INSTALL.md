@@ -1,6 +1,7 @@
 # AirTouch 2+ synchronisation candidate
 
-Version 0.2.13rc1 adds shared status requests every 30 seconds after the previous
+Version 0.2.13rc2 fixes startup imports for Home Assistant 2026.11.0 and retains
+the rc1 shared status requests every 30 seconds after the previous
 request completes, keeps push updates, and refreshes after explicit commands.
 Failed replies mark entities unavailable; a later poll replaces the connection.
 `last_successful_refresh` reports when all known ACs and zones last replied.
@@ -28,7 +29,7 @@ remain required. Treat this as a release candidate.
    returns. Compare the last-successful-refresh timestamp.
 
 Do not install the fork's unchanged master branch. Use the published candidate
-archive or `fix/regular-state-refresh`. HACS management of a fork with the same
+archive or `fix/ha-startup-compatibility`. HACS management of a fork with the same
 domain needs care: an upstream HACS update can overwrite a manual installation.
 Do not enable automatic updates for this custom component during validation.
 
