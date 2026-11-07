@@ -24,7 +24,19 @@ file restores the syntax error; use the fixed branch package instead.
 
 ## 0.2.13rc1
 
-- Add shared status requests, stale-state availability and reconnect recovery.
-- Refresh after explicit commands and retain push callbacks.
-- Pin the patched AirTouch library. The initial tests exercised protocol/refresh
-  behaviour but did not import the complete Home Assistant climate module.
+Chrix0689's refresh candidate adds the following over the upstream integration:
+
+- Keep push notifications and add shared AC/zone status requests every 30 seconds
+  after the previous refresh completes, with a 10-second response timeout.
+- Wait for replies from every known AC and zone; mark entities unavailable on
+  failed refreshes and reconnect on the next poll. Expose `last_successful_refresh`.
+- Request fresh status after commands and manual updates; serialise refreshes.
+- Send explicit HVAC ON/OFF requests even if the local cached power state already
+  matches the requested state.
+- Remove temporary callbacks and cancel the periodic task on unload.
+- Bound initial connection/discovery and stop the client when setup fails.
+- Pin the patched AirTouch library wheel with reconnect/command-loss fixes by
+  immutable commit and SHA-256 checksum.
+- Test refresh responses, timeouts, recovery, cancellation and explicit commands.
+  The initial tests did not import the complete Home Assistant climate module;
+  rc2 adds that coverage. These tests do not establish physical hardware behaviour.

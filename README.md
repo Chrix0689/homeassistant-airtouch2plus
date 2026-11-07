@@ -6,6 +6,34 @@ This candidate fixes the climate-platform startup imports and updates the
 temperature properties for **Home Assistant 2026.11.0**. The earlier rc1 refresh
 candidate contains outdated imports; use rc2 for this Home Assistant version.
 
+### What this fork changes from the original integration
+
+This branch includes Chrix0689's status-refresh candidate and the subsequent
+Home Assistant compatibility fixes:
+
+- **Regular status updates:** keeps controller push notifications and adds one
+  shared status request for the AC and zones every 30 seconds after the previous
+  refresh finishes. It also requests status after commands and manual updates.
+- **Stale-state reporting:** waits for every known AC and zone to reply. Failed
+  refreshes mark the entities unavailable; the next refresh attempts to replace
+  the connection. `last_successful_refresh` shows the last complete response time.
+- **Explicit power/mode commands:** sends the requested ON/OFF command even when
+  Home Assistant's cached state already says the unit is on or off, then requests
+  fresh status. This avoids skipping a command solely because the cache is stale.
+- **Patched controller library:** pins the forked AirTouch Python library
+  (`0.8.7.post1`) with reconnect/command-loss fixes, using an immutable wheel URL
+  and SHA-256 checksum. No manual edits to installed Python packages are needed.
+- **Refresh lifecycle:** serialises refresh requests, removes temporary response
+  callbacks and cancels the periodic task when the integration is unloaded.
+- **Home Assistant 2026.11 compatibility:** fixes startup imports, uses the native
+  temperature API and adds complete module-import tests against real Home Assistant.
+
+Existing configuration and AC/zone unique IDs are retained. The existing Celsius
+temperature range (10–35°C) and 1°C setpoint step are retained. These changes aim
+to improve status freshness and recovery; they do not prove that the vendor app
+or wall-controller display will always update at the same time. Read the test
+scope and remaining hardware checks below before installing.
+
 **[Download the fixed branch ZIP](https://github.com/Chrix0689/homeassistant-airtouch2plus/archive/refs/heads/fix/ha-startup-compatibility.zip)**
 
 [Changes](CHANGELOG.md) · [Installation and rollback](INSTALL.md) ·
