@@ -36,7 +36,9 @@ class TestHomeAssistantImports(unittest.TestCase):
             AirTouch2PlusGroupEntity,
         )
 
-        ac = SimpleNamespace(status=SimpleNamespace(id=0), ability=None)
+        ac = SimpleNamespace(
+            status=SimpleNamespace(id=0, temperature=23.0, set_point=24.0), ability=None
+        )
         refresh = SimpleNamespace(available=True)
         climate = Airtouch2PlusClimateEntity(ac, refresh)
         group = AirTouch2PlusGroupEntity(
@@ -45,6 +47,8 @@ class TestHomeAssistantImports(unittest.TestCase):
         self.assertEqual(climate.unique_id, "at2plus_ac_0")
         self.assertEqual(group.unique_id, "at2plus_group_1")
         self.assertEqual(climate.device_info["identifiers"], {("airtouch2plus", "at2plus_ac_0")})
-        self.assertEqual(climate.temperature_unit, UnitOfTemperature.CELSIUS)
+        self.assertEqual(climate.native_temperature_unit, UnitOfTemperature.CELSIUS)
+        self.assertEqual(climate.native_current_temperature, 23.0)
+        self.assertEqual(climate.native_target_temperature, 24.0)
         self.assertEqual((climate.min_temp, climate.max_temp), (10.0, 35.0))
         self.assertEqual(climate.target_temperature_step, 1.0)

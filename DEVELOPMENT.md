@@ -34,7 +34,11 @@ The installed system was observed running Home Assistant Core 2026.11.0. Its
 climate module no longer exports `UnitOfTemperature` or `PRECISION_WHOLE`.
 Those constants now come directly from `homeassistant.const`, with valid
 parenthesised imports. `DeviceInfo` also comes from its defining module,
-`homeassistant.helpers.device_registry`. Unique IDs, config entry schema,
+`homeassistant.helpers.device_registry`. The three deprecated climate temperature
+members use the new native-temperature API available in Home Assistant 2026.11.
+The reported Celsius values and existing limits/step are retained. This candidate
+targets Home Assistant 2026.11.0; older versions have not been validated.
+Unique IDs, config entry schema,
 refresh logic, commands and the pinned AirTouch dependency are unchanged.
 
 The previously installed file had a separate syntax error: a bare import split

@@ -1,5 +1,8 @@
 # AirTouch 2+ synchronisation candidate
 
+Requires Home Assistant 2026.11.0 or later for the native-temperature API.
+Compatibility tests currently cover exactly 2026.11.0.
+
 Version 0.2.13rc2 fixes startup imports for Home Assistant 2026.11.0 and retains
 the rc1 shared status requests every 30 seconds after the previous
 request completes, keeps push updates, and refreshes after explicit commands.
